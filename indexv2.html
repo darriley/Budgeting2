@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <title>Advanced Budgeting</title>
+</head>
+<body>
+  <header>
+    <h1> Budgeting Website</h1>
+  </header>
+  <main>
+    <section id="budget-form">
+      <label for="income">Income:</label>
+      <input type="number" id="income" placeholder="Enter your monthly income">
+
+      <label for="expenses">Expenses:</label>
+      <div id="expense-list">
+        <div class="expense-input">
+          <input type="text" class="expense-name" placeholder="Expense name">
+          <input type="number" class="expense-amount" placeholder="Amount">
+        </div>
+      </div>
+
+      <button onclick="addExpense()">Add Expense</button>
+      <button onclick="calculateBudget()">Calculate Budget</button>
+    </section>
+  <link rel="stylesheet" href="style.css">
+    <section id="budget-result">
+      <h2>Your Budget Breakdown:</h2>
+      <ul id="budget-breakdown"></ul>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- existing head content -->
+
+  <script>
+    // ... (previous code)
+
+    // Retrieve stored budget breakdowns from local storage on page load
+    document.addEventListener('DOMContentLoaded', function () {
+      if (localStorage.getItem('expensesArray')) {
+        expensesArray = JSON.parse(localStorage.getItem('expensesArray'));
+        displayAllBudgetBreakdowns();
+      }
+    });
+
+    // ... (previous code)
+
+    // Save the budget breakdown with the current date to local storage
+    function addBudgetBreakdown() {
+      const income = parseFloat(document.getElementById('income').value) || 0;
+      let totalExpenses = 0;
+      const expenses = [];
+
+      document.querySelectorAll('.expense-input').forEach((expenseInput) => {
+        const expenseName = expenseInput.querySelector('.expense-name').value;
+        const expenseAmount = parseFloat(expenseInput.querySelector('.expense-amount').value) || 0;
+
+        if (expenseName && expenseAmount) {
+          expenses.push({ name: expenseName, amount: expenseAmount });
+          totalExpenses += expenseAmount;
+        }
+      });
+
+      const budget = income - totalExpenses;
+
+      // Save the budget breakdown with the current date
+      const currentDate = getCurrentDate();
+      const budgetEntry = { date: currentDate, budget, expenses };
+      expensesArray.unshift(budgetEntry);
+      localStorage.setItem('expensesArray', JSON.stringify(expensesArray));
+
+      // Display all budget breakdowns
+      displayAllBudgetBreakdowns();
+    }
+
+    // ... (previous code)
+
+    // Clear local storage and reset the displayed budget breakdowns
+    function clearBudgetBreakdowns() {
+      localStorage.removeItem('expensesArray');
+      expensesArray = [];
+      displayAllBudgetBreakdowns();
+    }
+
+    // ... (previous code)
+  </script>
+</head>
+<body>
+  <!-- existing body content -->
+
+  <footer>
+    <button onclick="clearBudgetBreakdowns()">Clear Budget Breakdowns</button>
+  </footer>
+</body>
+</html>
